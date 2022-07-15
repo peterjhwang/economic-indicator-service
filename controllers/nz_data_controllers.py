@@ -1,6 +1,8 @@
 from flask import request, jsonify
 from flask_app import application
 from entities.nz_data.stats import CacheData, get_groupby_cal
+from apscheduler.schedulers.background import BackgroundScheduler
+import pytz
 
 import plotly.express as px
 import plotly.graph_objects as go
@@ -12,6 +14,22 @@ DEFAULT_COLORS = px.colors.qualitative.Alphabet
 
 data_obj = CacheData()
 selected_metric_dict = dict()
+
+@application.route('/reload')
+def reload_stats_data():
+    data_obj.load_data()
+    return jsonify({'message': 'data reloaded'})
+
+nz_data_scheduler = BackgroundScheduler(timezone = pytz.timezone('Pacific/Auckland'))
+nz_data_scheduler.add_job(func=reload_stats_data, 
+    trigger='cron', 
+    minute='5',
+    hour='3',
+    day='*',
+    month='*',
+    week='*',
+    id='data_reload')
+nz_data_scheduler.start()
 
 SYMBOL_DICT = {1: 'D',
                7: 'W',
