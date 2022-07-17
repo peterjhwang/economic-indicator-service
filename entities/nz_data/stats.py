@@ -8,7 +8,6 @@ class CacheData:
         self.load_data()
 
     def load_data(self):
-        now = dt.now()
         data_df = download_from_s3_return_df('api-data.csv', 'nz-stats/stats-api/')
         data_df = data_df[(data_df['ResourceID'].isin(['CPTRD2', 'CPTRD4', 'CPTRD1', 'CPTRD5'])) | (data_df['Duration'].notnull())].copy()
         data_df['Period'] = pd.to_datetime(data_df['Period'])
@@ -23,7 +22,7 @@ class CacheData:
         self.df.loc[self.df.Duration=='P7D', 'Duration'] = 7
         self.df.loc[self.df.Duration=='P1M', 'Duration'] = 30
         self.df.loc[self.df.Duration=='P3M', 'Duration'] = 90
-        application.logger.info(f'{len(self.df)} stats data loaded', dt.now() - now)
+        application.logger.info(f'{len(self.df)} stats data loaded')
 
     def get_dataframe(self):
         return self.df
