@@ -1,5 +1,5 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from controllers.nz_data_controllers import reload_stats_data
+from controllers.stats_controllers import reload_stats_data
 import pytz
 
 nz_data_scheduler = BackgroundScheduler(timezone = pytz.timezone('Pacific/Auckland'))

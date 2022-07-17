@@ -6,7 +6,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 application = Flask(__name__)
 
-from controllers import nz_data_controllers, test_controllers
+from controllers import stats_controllers, test_controllers
 from scheduler import scheduler
     
 @application.route('/test')
