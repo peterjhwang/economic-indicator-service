@@ -25,7 +25,7 @@ def download_from_s3_return_df(filename, file_location):
 
 # SNS
 def send_message(typ, message):
-    client = boto3.client('sns')
+    client = boto3.client('sns', region_name = 'ap-southeast-2')
     return client.publish(TopicArn = SNS_ARN,
                    Message = message,
                    Subject = f"{typ} - economic-indicator-service")
