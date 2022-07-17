@@ -2,6 +2,7 @@ from flask import request, jsonify
 from flask_app import application
 from entities.nz_data.stats import CacheData, get_groupby_cal
 from apscheduler.schedulers.background import BackgroundScheduler
+from utils.aws import send_message
 import pytz
 
 import plotly.express as px
@@ -17,7 +18,11 @@ selected_metric_dict = dict()
 
 @application.route('/reload')
 def reload_stats_data():
-    data_obj.load_data()
+    try:
+        data_obj.load_data()
+        send_message("INFO", 'Cache file successfully reloaded.\n\neconomic-indicator-service')
+    except Exception as e:
+        send_message("ERROR", str(e) + '\n\neconomic-indicator-service')
     return jsonify({'message': 'data reloaded'})
 
 nz_data_scheduler = BackgroundScheduler(timezone = pytz.timezone('Pacific/Auckland'))
