@@ -14,14 +14,21 @@ DEFAULT_COLORS = px.colors.qualitative.Alphabet
 data_obj = CacheData()
 selected_metric_dict = dict()
 
-@application.route('/reload')
 def reload_stats_data():
     try:
         data_obj.load_data()
         send_message("INFO", 'Cache file successfully reloaded.\n\neconomic-indicator-service')
+        return True
     except Exception as e:
         send_message("ERROR", str(e) + '\n\neconomic-indicator-service')
-    return jsonify({'message': 'data reloaded'})
+        return False
+
+@application.route('/reload')
+def reload_data():
+    if reload_stats_data():
+        return jsonify({'message': 'Successfully data reloaded'})
+    else:
+        return jsonify({'Error': 'Data reload failed'})
 
 SYMBOL_DICT = {1: 'D',
                7: 'W',
