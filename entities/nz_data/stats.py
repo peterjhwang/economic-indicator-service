@@ -11,6 +11,7 @@ class CacheData:
         data_df = download_from_s3_return_df('api-data.csv', 'nz-stats/stats-api/')
         data_df = data_df[(data_df['ResourceID'].isin(['CPTRD2', 'CPTRD4', 'CPTRD1', 'CPTRD5'])) | (data_df['Duration'].notnull())].copy()
         data_df['Period'] = pd.to_datetime(data_df['Period'])
+        data_df = data_df[data_df['Period'].notnull()]
         data_df.fillna('', inplace=True)
 
         meta_df = download_from_s3_return_df('meta.csv', 'nz-stats/stats-api/')
