@@ -2,6 +2,7 @@ from flask import request, jsonify
 from flask_app import application
 from entities.nz_data.stats import CacheData, get_groupby_cal
 from utils.aws import send_message
+from datetime import datetime as dt
 
 import plotly.express as px
 import plotly.graph_objects as go
@@ -54,6 +55,8 @@ def manipulate_data(metrics, date_range_min, date_range_max):
         if max_duration < temp_dur:
             max_duration = temp_dur
     result_df = pd.DataFrame()
+    application.logger.info(max_duration)
+    application.logger.info(SYMBOL_DICT)
     resample_by = SYMBOL_DICT[max_duration]
     # re-create dataframe
     secondary_y_dict = dict()
@@ -175,12 +178,15 @@ def get_csv():
     application.logger.info('/get_csv')
     application.logger.info(request.get_json())
     cookie = request.get_json()['cookie']
-    metrics = selected_metric_dict[cookie]
-    date_range_min = request.get_json()['min']
-    date_range_max = request.get_json()['max']
-    #print(titles)
-    fig = go.Figure()
-    count = 0
-    dff, _, _ = manipulate_data(metrics, date_range_min, date_range_max)
-    return jsonify({'data': dff.to_csv(), 
-            'filename': f"nz_economic_data_{dt.now().strftime('%Y%m%d')}.csv"})
+    if cookie in selected_metric_dict:
+        metrics = selected_metric_dict[cookie]
+        date_range_min = request.get_json()['min']
+        date_range_max = request.get_json()['max']
+        #print(titles)
+        fig = go.Figure()
+        count = 0
+        dff, _, _ = manipulate_data(metrics, date_range_min, date_range_max)
+        return jsonify({'data': dff.to_csv(), 
+                'filename': f"nz_economic_data_{dt.now().strftime('%Y%m%d')}.csv"})
+    else:
+        return jsonify({'data': 'no data'})
