@@ -25,3 +25,7 @@ def refresh_stats_api():
         return jsonify({'message': 'Stats data successfully refreshed'})
     except Exception as e:
         return jsonify({'Error message': str(e)})
+
+@application.route('/test')
+def api_test():
+    return jsonify({'message': 'API is running'})

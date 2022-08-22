@@ -19,9 +19,11 @@ def reload_stats_data():
     try:
         data_obj.load_data()
         #send_message("INFO", 'Cache file successfully reloaded.\n\neconomic-indicator-service')
+        application.logger.info('Cache file successfully reloaded.')
         return True
     except Exception as e:
         send_message("ERROR", str(e) + '\n\neconomic-indicator-service')
+        application.logger.error(str(e))
         return False
 
 @application.route('/reload')
