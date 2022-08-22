@@ -18,7 +18,7 @@ selected_metric_dict = dict()
 def reload_stats_data():
     try:
         data_obj.load_data()
-        send_message("INFO", 'Cache file successfully reloaded.\n\neconomic-indicator-service')
+        #send_message("INFO", 'Cache file successfully reloaded.\n\neconomic-indicator-service')
         return True
     except Exception as e:
         send_message("ERROR", str(e) + '\n\neconomic-indicator-service')
