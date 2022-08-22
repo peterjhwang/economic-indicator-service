@@ -23,9 +23,24 @@ def download_from_s3_return_df(filename, file_location):
     os.remove('temp/'+filename)
     return df
 
+def upload_str_to_s3(df_str: str, file_location: str):
+    client = boto3.client('s3')
+    client.put_object(Body=df_str, Bucket='economic-indicators', Key=file_location)
+
 # SNS
 def send_message(typ, message):
     client = boto3.client('sns', region_name = 'ap-southeast-2')
     return client.publish(TopicArn = SNS_ARN,
                    Message = message,
                    Subject = f"{typ} - economic-indicator-service")
+
+
+# Secret Manager
+def get_secret(secret_name, region_name="ap-southeast-2"):
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+    response = client.get_secret_value(SecretId=secret_name)
+    return response['SecretString']
