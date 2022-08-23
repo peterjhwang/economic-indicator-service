@@ -36,6 +36,7 @@ def stats_api_refresh():
         application.logger.info(f'{count} data downloaded via Stats API')
         upload_str_to_s3(df.to_csv(index=False), 'nz-stats/stats-api/api-data.csv')
         application.logger.info('New api-data.csv file has been uploaded to S3')
-        send_message("INFO", 'Cache file successfully refreshed.\n\nstats_api_service')
+        #send_message("INFO", 'Cache file successfully refreshed.\n\nstats_api_service')
     except Exception as e:
+        application.logger.error('stats_api_refresh error:\n'+str(e))
         send_message("ERROR", str(e) + '\n\nstats_api_service')

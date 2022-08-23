@@ -23,7 +23,7 @@ def reload_stats_data():
         return True
     except Exception as e:
         send_message("ERROR", str(e) + '\n\neconomic-indicator-service')
-        application.logger.error(str(e))
+        application.logger.error('reload_stats_data error:\n'+str(e))
         return False
 
 @application.route('/reload')
