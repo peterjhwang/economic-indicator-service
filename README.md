@@ -1,6 +1,14 @@
 # economic-indicator-service
 
-This is a Flask backend for economic-indicator project.
+This is a Flask backend as well as orchestrator for the economic-indicator project. It returns Plotly object for the data visualisation.
+
+Deployed to AWS elastic beanstalk as a Flask application.
+
+## What it does?
+1. Backend for the economic-indicator project frontend. It returns Plotly object for the data visualisation.
+2. Pulls all stats data via Stats API for now and stores it into S3 bucket.
+3. If it needs webscraping javascript enabled contents, it uses ph-webscrapper-lambda which uses Selenium. 
+
 
 ## Getting Started
 
@@ -24,7 +32,3 @@ This is a Flask backend for economic-indicator project.
 ## Technologies
 
 - Flask
-
-## Authors
-
-- Peter Hwang
